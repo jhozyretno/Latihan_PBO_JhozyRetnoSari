@@ -3,7 +3,7 @@
 $host = "localhost";
 $username = "root";
 $password = ""; // Kosongkan jika menggunakan XAMPP bawaan
-$database = "nama_database_kamu"; // Ganti dengan nama database latihanmu
+$database = "db_latihan_pbo_ti1c_jhozyretnosari"; 
 
 $koneksi = new mysqli($host, $username, $password, $database);
 
