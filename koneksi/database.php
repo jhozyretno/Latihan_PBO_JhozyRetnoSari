@@ -1,5 +1,5 @@
 <?php
-// Sesuaikan dengan konfigurasi database MySQL kamu
+
 $host = "localhost";
 $username = "root";
 $password = ""; // Kosongkan jika menggunakan XAMPP bawaan
