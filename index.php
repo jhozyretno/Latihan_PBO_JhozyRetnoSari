@@ -1,5 +1,5 @@
 <?php
-// Memanggil koneksi database
+// Memanggil koneksi database dari folder koneksi
 require_once 'koneksi/database.php';
 
 // Memanggil class tiket
@@ -12,22 +12,22 @@ require_once 'tiket_Velvet.php';
 // ==========================================
 if (isset($_POST['pesan_tiket'])) {
     $tipe_studio = $_POST['tipe_studio']; // Akan berisi REG, IMX, atau VLV
-    $nama_film = $_POST['nama_film'];
+    
+    // Menitipkan kode studio ke nama film
+    $nama_film = "[" . $tipe_studio . "] " . $_POST['nama_film']; 
+    
     $jadwal_tayang = $_POST['jadwal_tayang'];
     $jumlah_kursi = $_POST['jumlah_kursi'];
     $harga_dasar = $_POST['harga_dasar'];
 
-    // Membuat ID Tiket otomatis berdasarkan tipe studio + angka acak
-    $id_tiket = $tipe_studio . "-" . rand(100, 999);
-
-    // Query untuk menyimpan ke database
-    $queryInsert = "INSERT INTO tabel_tiket (id_tiket, nama_film, jadwal_tayang, jumlah_kursi, harga_dasar_tiket) 
-                    VALUES ('$id_tiket', '$nama_film', '$jadwal_tayang', '$jumlah_kursi', '$harga_dasar')";
+    // Query INSERT: id_tiket tidak dimasukkan agar database mengisinya otomatis secara urut (Auto Increment)
+    $queryInsert = "INSERT INTO tabel_tiket (nama_film, jadwal_tayang, jumlah_kursi, harga_dasar_tiket) 
+                    VALUES ('$nama_film', '$jadwal_tayang', '$jumlah_kursi', '$harga_dasar')";
     
     if ($koneksi->query($queryInsert) === TRUE) {
         echo "<script>alert('Tiket berhasil dipesan!'); window.location.href='index.php';</script>";
     } else {
-        echo "Error: " . $queryInsert . "<br>" . $koneksi->error;
+        echo "<script>alert('Error: " . $koneksi->error . "');</script>";
     }
 }
 ?>
@@ -39,29 +39,35 @@ if (isset($_POST['pesan_tiket'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pemesanan Tiket Bioskop</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 20px; }
-        h1, h2 { text-align: center; color: #333; }
+        /* Mengubah font utama menjadi Times New Roman dan teks menjadi hitam */
+        body { font-family: "Times New Roman", Times, serif; color: black; background-color: #f4ebfa; margin: 20px; } 
+        h1, h2 { text-align: center; color: black; } 
         
         /* Form Styling */
-        .form-container { background: white; max-width: 500px; margin: 0 auto 30px auto; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .form-container { background: white; max-width: 500px; margin: 0 auto 30px auto; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(106, 27, 154, 0.15); }
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-weight: bold; margin-bottom: 5px; }
-        .form-group input, .form-group select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-        .btn-submit { background-color: #28a745; color: white; border: none; padding: 10px 15px; width: 100%; font-size: 16px; border-radius: 4px; cursor: pointer; }
-        .btn-submit:hover { background-color: #218838; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 5px; color: black; }
+        /* Memastikan input form juga menggunakan Times New Roman */
+        .form-group input, .form-group select { font-family: "Times New Roman", Times, serif; width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ce93d8; border-radius: 4px; color: black; }
+        
+        /* Tombol Pesan (teks tetap putih agar terbaca jelas di atas warna ungu) */
+        .btn-submit { font-family: "Times New Roman", Times, serif; background-color: #8e24aa; color: white; border: none; padding: 10px 15px; width: 100%; font-size: 16px; border-radius: 4px; cursor: pointer; transition: 0.3s; }
+        .btn-submit:hover { background-color: #6a1b9a; } 
 
-        /* Card Styling (dari kode sebelumnya) */
+        /* Card Styling */
         .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
-        .kategori { background: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 30%; padding: 20px; min-width: 250px; }
-        .kategori h2 { border-bottom: 2px solid #007BFF; padding-bottom: 10px; color: #007BFF; }
-        .tiket-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 5px; background-color: #fafafa; }
-        .harga { font-size: 18px; color: #28a745; margin-top: 10px; }
-        .fasilitas { margin-top: 10px; font-size: 14px; color: #555; background: #e9ecef; padding: 10px; border-radius: 4px; }
+        .kategori { background: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(106, 27, 154, 0.15); width: 30%; padding: 20px; min-width: 250px; }
+        .kategori h2 { border-bottom: 2px solid #ab47bc; padding-bottom: 10px; color: black; } 
+        .tiket-card { border: 1px solid #e1bee7; padding: 15px; margin-bottom: 15px; border-radius: 5px; background-color: #ffffff; color: black; }
+        
+        /* Harga dan Fasilitas */
+        .harga { font-size: 18px; color: black; margin-top: 10px; font-weight: bold; } 
+        .fasilitas { margin-top: 10px; font-size: 14px; color: black; background: #f4ebfa; padding: 10px; border-radius: 4px; }
     </style>
 </head>
 <body>
 
-    <h1>Aplikasi Bioskop</h1>
+    <h1>Aplikasi Pemesanan Bioskop</h1>
 
     <div class="form-container">
         <h2>Pesan Tiket Baru</h2>
@@ -94,14 +100,15 @@ if (isset($_POST['pesan_tiket'])) {
         </form>
     </div>
 
-    <hr>
+    <hr style="border: 1px solid #ce93d8;">
     <h2>Daftar Tiket Terpesan</h2>
     <div class="container">
 
         <div class="kategori">
             <h2>Studio Regular</h2>
             <?php
-            $queryRegular = "SELECT * FROM tabel_tiket WHERE id_tiket LIKE 'REG%'"; 
+            // Memfilter berdasarkan awalan [REG] di nama film
+            $queryRegular = "SELECT * FROM tabel_tiket WHERE nama_film LIKE '[REG]%'"; 
             $resultRegular = $koneksi->query($queryRegular);
 
             if ($resultRegular->num_rows > 0) {
@@ -109,21 +116,22 @@ if (isset($_POST['pesan_tiket'])) {
                     $tiketReg = new TiketRegular($row['id_tiket'], $row['nama_film'], $row['jadwal_tayang'], $row['jumlah_kursi'], $row['harga_dasar_tiket'], "Dolby Digital", "Baris Tengah");
                     
                     echo "<div class='tiket-card'>";
-                    echo "<strong>ID Tiket:</strong> " . $tiketReg->getIdTiket() . "<br>";
+                    echo "<strong>ID Tiket (Auto):</strong> " . $tiketReg->getIdTiket() . "<br>";
                     echo "<strong>Film:</strong> " . $tiketReg->getNamaFilm() . "<br>";
                     echo "<strong>Kursi:</strong> " . $tiketReg->getJumlahKursi() . "<br>";
                     echo "<div class='fasilitas'>"; $tiketReg->tampilkanInfoFasilitas(); echo "</div>";
-                    echo "<div class='harga'><b>Total: Rp " . number_format($tiketReg->hitungTotalHarga(), 0, ',', '.') . "</b></div>";
+                    echo "<div class='harga'>Total Harga: Rp " . number_format($tiketReg->hitungTotalHarga(), 0, ',', '.') . "</div>";
                     echo "</div>";
                 }
-            } else { echo "<p>Belum ada pemesanan.</p>"; }
+            } else { echo "<p>Belum ada pemesanan di studio ini.</p>"; }
             ?>
         </div>
 
         <div class="kategori">
             <h2>Studio IMAX</h2>
             <?php
-            $queryIMAX = "SELECT * FROM tabel_tiket WHERE id_tiket LIKE 'IMX%'"; 
+            // Memfilter berdasarkan awalan [IMX] di nama film
+            $queryIMAX = "SELECT * FROM tabel_tiket WHERE nama_film LIKE '[IMX]%'"; 
             $resultIMAX = $koneksi->query($queryIMAX);
 
             if ($resultIMAX->num_rows > 0) {
@@ -131,21 +139,22 @@ if (isset($_POST['pesan_tiket'])) {
                     $tiketIMX = new TiketIMAX($row['id_tiket'], $row['nama_film'], $row['jadwal_tayang'], $row['jumlah_kursi'], $row['harga_dasar_tiket'], "KCM-3D-VIP", "Active Motion Seat");
                     
                     echo "<div class='tiket-card'>";
-                    echo "<strong>ID Tiket:</strong> " . $tiketIMX->getIdTiket() . "<br>";
+                    echo "<strong>ID Tiket (Auto):</strong> " . $tiketIMX->getIdTiket() . "<br>";
                     echo "<strong>Film:</strong> " . $tiketIMX->getNamaFilm() . "<br>";
                     echo "<strong>Kursi:</strong> " . $tiketIMX->getJumlahKursi() . "<br>";
                     echo "<div class='fasilitas'>"; $tiketIMX->tampilkanInfoFasilitas(); echo "</div>";
-                    echo "<div class='harga'><b>Total: Rp " . number_format($tiketIMX->hitungTotalHarga(), 0, ',', '.') . "</b></div>";
+                    echo "<div class='harga'>Total Harga: Rp " . number_format($tiketIMX->hitungTotalHarga(), 0, ',', '.') . "</div>";
                     echo "</div>";
                 }
-            } else { echo "<p>Belum ada pemesanan.</p>"; }
+            } else { echo "<p>Belum ada pemesanan di studio ini.</p>"; }
             ?>
         </div>
 
         <div class="kategori">
             <h2>Studio Velvet</h2>
             <?php
-            $queryVelvet = "SELECT * FROM tabel_tiket WHERE id_tiket LIKE 'VLV%'"; 
+            // Memfilter berdasarkan awalan [VLV] di nama film
+            $queryVelvet = "SELECT * FROM tabel_tiket WHERE nama_film LIKE '[VLV]%'"; 
             $resultVelvet = $koneksi->query($queryVelvet);
 
             if ($resultVelvet->num_rows > 0) {
@@ -153,14 +162,14 @@ if (isset($_POST['pesan_tiket'])) {
                     $tiketVlv = new TiketVelvet($row['id_tiket'], $row['nama_film'], $row['jadwal_tayang'], $row['jumlah_kursi'], $row['harga_dasar_tiket'], "Premium Bed Setup", "Tersedia");
                     
                     echo "<div class='tiket-card'>";
-                    echo "<strong>ID Tiket:</strong> " . $tiketVlv->getIdTiket() . "<br>";
+                    echo "<strong>ID Tiket (Auto):</strong> " . $tiketVlv->getIdTiket() . "<br>";
                     echo "<strong>Film:</strong> " . $tiketVlv->getNamaFilm() . "<br>";
                     echo "<strong>Kursi:</strong> " . $tiketVlv->getJumlahKursi() . "<br>";
                     echo "<div class='fasilitas'>"; $tiketVlv->tampilkanInfoFasilitas(); echo "</div>";
-                    echo "<div class='harga'><b>Total: Rp " . number_format($tiketVlv->hitungTotalHarga(), 0, ',', '.') . "</b></div>";
+                    echo "<div class='harga'>Total Harga: Rp " . number_format($tiketVlv->hitungTotalHarga(), 0, ',', '.') . "</div>";
                     echo "</div>";
                 }
-            } else { echo "<p>Belum ada pemesanan.</p>"; }
+            } else { echo "<p>Belum ada pemesanan di studio ini.</p>"; }
             ?>
         </div>
 
@@ -170,5 +179,6 @@ if (isset($_POST['pesan_tiket'])) {
 </html>
 
 <?php
+// Menutup koneksi
 $koneksi->close();
 ?>
