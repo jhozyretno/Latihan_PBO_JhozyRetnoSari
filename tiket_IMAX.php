@@ -15,8 +15,8 @@ class TiketIMAX extends Tiket {
 
     // Implementasi wajib dari metode abstrak
     public function hitungTotalHarga() {
-        // Contoh: Harga dasar ditambah biaya fasilitas IMAX
-        return $this->harga_dasar_tiket + 50000; 
+        // Dikenakan biaya tambahan teknologi IMAX Rp35.000
+        return ($this->jumlah_kursi * $this->harga_dasar_tiket) + 35000; 
     }
 
     public function tampilkanInfoFasilitas() {

@@ -18,7 +18,8 @@ class TiketRegular extends Tiket {
 
     // Implementasi wajib dari metode abstrak
     public function hitungTotalHarga() {
-        return $this->harga_dasar_tiket; 
+        // Tarif standar murni tanpa biaya tambahan fasilitas
+        return $this->jumlah_kursi * $this->harga_dasar_tiket; 
     }
 
     public function tampilkanInfoFasilitas() {

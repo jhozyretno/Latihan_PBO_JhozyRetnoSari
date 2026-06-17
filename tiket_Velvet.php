@@ -15,8 +15,8 @@ class TiketVelvet extends Tiket {
 
     // Implementasi wajib dari metode abstrak
     public function hitungTotalHarga() {
-        // Contoh: Harga dasar ditambah biaya fasilitas Premium/Velvet
-        return $this->harga_dasar_tiket + 100000; 
+        // Dikenakan surcharge/biaya tambahan 50% (dikali 1.50)
+        return ($this->jumlah_kursi * $this->harga_dasar_tiket) * 1.50; 
     }
 
     public function tampilkanInfoFasilitas() {
