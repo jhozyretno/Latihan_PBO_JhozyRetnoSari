@@ -1,6 +1,6 @@
 <?php
 // Memanggil koneksi dan semua class
-require_once 'database.php';
+require_once 'koneksi/database.php';
 require_once 'tiket_regular.php';
 require_once 'tiket_IMAX.php';
 require_once 'tiket_Velvet.php';
